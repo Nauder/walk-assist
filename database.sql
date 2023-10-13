@@ -1,0 +1,6 @@
+CREATE DATABASE tcs_db;
+CREATE ROLE tcs_role;
+GRANT ALL PRIVILEGES ON DATABASE tcs_db TO tcs_role;
+GRANT ALL PRIVILEGES ON SCHEMA tcs_db.public  TO tcs_role;
+CREATE ROLE tcs_user WITH LOGIN PASSWORD '123123';
+GRANT tcs_role TO tcs_user;

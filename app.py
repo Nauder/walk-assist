@@ -3,6 +3,7 @@ import os
 from flask import Flask, json
 
 from blueprints.login_workshop import login_mold
+from blueprints.ponto_workshop import ponto_mold
 from blueprints.usuario_workshop import usuario_mold
 from extensions import db, app_migrate
 from werkzeug.exceptions import HTTPException
@@ -19,6 +20,7 @@ def create_app() -> Flask:
 
 def _register_blueprints(new_app):
     new_app.register_blueprint(usuario_mold, url_prefix="/usuarios")
+    new_app.register_blueprint(ponto_mold, url_prefix="/pontos")
     new_app.register_blueprint(login_mold, url_prefix="/")
 
 

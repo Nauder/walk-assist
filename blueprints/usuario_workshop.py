@@ -1,4 +1,5 @@
 from flask import Blueprint, request, Response
+from flask_jwt_extended import jwt_required
 
 from exceptions.InvalidCredentialsException import InvalidCredentialsException
 from exceptions.InvalidFieldException import InvalidFieldException
@@ -10,7 +11,7 @@ usuario_mold = Blueprint("usuarios", __name__)
 
 
 @usuario_mold.get('/')
-@admin_login_required
+@jwt_required()
 def get_usuarios_route() -> Response:
     return build_response(
         True,

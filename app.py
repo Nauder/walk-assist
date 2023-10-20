@@ -1,50 +1,33 @@
 import os
 
-from flask import Flask, json
+from flask import Flask
 
 from blueprints.login_workshop import login_mold
 from blueprints.ponto_workshop import ponto_mold
 from blueprints.usuario_workshop import usuario_mold
-from extensions import db, app_migrate
-from werkzeug.exceptions import HTTPException
+from extensions import db, app_migrate, jwt, flask_app
 
 
-def create_app() -> Flask:
-    new_app: Flask = Flask(__name__.split('.')[0])
-    new_app.config.from_pyfile(os.path.join(".", "config/app.conf"), silent=False)
-    _register_blueprints(new_app)
-    _register_extensions(new_app)
+class AppWrapper:
+    app: Flask = flask_app
 
-    return new_app
+    def __init__(self):
+        self.app.config.from_pyfile(os.path.join(".", "config/app.conf"), silent=False)
+        self._register_blueprints()
+        self._register_extensions()
 
+    def _register_blueprints(self):
+        self.app.register_blueprint(usuario_mold, url_prefix="/usuarios")
+        self.app.register_blueprint(ponto_mold, url_prefix="/pontos")
+        self.app.register_blueprint(login_mold, url_prefix="/")
 
-def _register_blueprints(new_app):
-    new_app.register_blueprint(usuario_mold, url_prefix="/usuarios")
-    new_app.register_blueprint(ponto_mold, url_prefix="/pontos")
-    new_app.register_blueprint(login_mold, url_prefix="/")
-
-
-def _register_extensions(new_app):
-    db.init_app(new_app)
-    app_migrate.db = db
-    app_migrate.init_app(new_app)
-
-
-app: Flask = create_app()
-
-
-@app.errorhandler(HTTPException)
-def handle_exception(e):
-    response = e.get_response()
-    response.data = json.dumps({
-        "success": False,
-        "code": e.code,
-        "name": e.name,
-        "message": e.description,
-    })
-    response.content_type = "application/json"
-    return response
+    def _register_extensions(self):
+        db.init_app(self.app)
+        jwt.init_app(self.app)
+        app_migrate.db = db
+        app_migrate.init_app(self.app)
 
 
 if __name__ == '__main__':
-    app.run()
+    app_wrapper = AppWrapper()
+    app_wrapper.app.run(host="0.0.0.0")

@@ -54,5 +54,5 @@ def delete_usuario(usuario: dict[str, str], registro: str) -> None:
         raise InvalidFieldException("senha")
 
 
-def check_login(name: str, password: str) -> bool:
-    return Usuario.query.exists(Usuario.nome == name, Usuario.senha == password)
+def check_login(registro: str, password: str) -> bool:
+    return bool(Usuario.query.filter(Usuario.registro == str(registro), Usuario.senha == str(password)).first())

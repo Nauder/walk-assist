@@ -17,6 +17,7 @@ This repository contains the **WIP** code for a project aimed at helping blind i
 - RESTful API built with Flask for blind navigation assistance.
 - Utilizes Alchemy for object-relational mapping.
 - PostgreSQL database for storage and retrieval of location and user information.
+- Authentication and authorization for standard and admin users through JWT.
 
 ## Getting Started
 

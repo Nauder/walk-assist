@@ -1,7 +1,7 @@
 from flask import Blueprint, request, Response
+from flask_jwt_extended import jwt_required
 
 from exceptions.InvalidFieldException import InvalidFieldException
-from security.login_manager import admin_login_required
 from services.ponto_service import get_pontos, post_ponto
 from util.response_builder import build_response
 
@@ -9,7 +9,7 @@ ponto_mold = Blueprint("pontos", __name__)
 
 
 @ponto_mold.get('/')
-@admin_login_required
+@jwt_required()
 def get_pontos_route() -> Response:
     return build_response(
         True,
@@ -20,7 +20,7 @@ def get_pontos_route() -> Response:
 
 
 @ponto_mold.post('/')
-@admin_login_required
+@jwt_required()
 def post_ponto_route() -> Response:
     if request.mimetype == 'application/json':
         try:

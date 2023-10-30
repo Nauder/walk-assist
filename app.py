@@ -16,7 +16,7 @@ def create_app():
     flask_app.config.from_pyfile(os.path.join(".", "config/app.conf"), silent=False)
     _register_blueprints(flask_app)
     _register_extensions(flask_app)
-    CORS(flask_app, origins="*")
+    CORS(flask_app, support_credentials=True)
 
     return flask_app
 

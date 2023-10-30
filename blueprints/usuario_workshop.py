@@ -1,4 +1,5 @@
 from flask import Blueprint, request, Response
+from flask_cors import cross_origin
 from flask_jwt_extended import jwt_required
 
 from exceptions.InvalidCredentialsException import InvalidCredentialsException
@@ -9,7 +10,7 @@ from util.response_builder import build_response
 usuario_mold = Blueprint("usuarios", __name__)
 
 
-@usuario_mold.get('/')
+@usuario_mold.get('')
 @jwt_required()
 def get_usuarios_route() -> Response:
     return build_response(
@@ -31,8 +32,9 @@ def get_usuario_route(registro: str) -> Response:
     )
 
 
-@usuario_mold.post('/')
+@usuario_mold.post('')
 @jwt_required()
+@cross_origin(supports_credentials=True)
 def post_usuario_route() -> Response:
     if request.mimetype == 'application/json':
         try:

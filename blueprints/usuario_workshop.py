@@ -4,6 +4,7 @@ from flask_jwt_extended import jwt_required
 
 from exceptions.InvalidCredentialsException import InvalidCredentialsException
 from exceptions.InvalidFieldException import InvalidFieldException
+from services.token_service import admin_required
 from services.usuario_service import get_usuarios, post_usuario, get_usuario, put_usuario, delete_usuario
 from util.response_builder import build_response
 
@@ -34,6 +35,7 @@ def get_usuario_route(registro: str) -> Response:
 
 @usuario_mold.post('')
 @jwt_required()
+@admin_required
 @cross_origin(supports_credentials=True)
 def post_usuario_route() -> Response:
     if request.mimetype == 'application/json':

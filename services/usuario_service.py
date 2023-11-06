@@ -28,7 +28,7 @@ def post_usuario(usuario: dict[str, str]) -> Usuario:
         db.session.commit()
         return new_usuario
     else:
-        raise InvalidFieldException("")
+        raise InvalidFieldException("usuario")
 
 
 def put_usuario(usuario: dict[str, str], registro: str) -> Usuario:
@@ -39,7 +39,7 @@ def put_usuario(usuario: dict[str, str], registro: str) -> Usuario:
         db.session.commit()
         return existing_usuario
     else:
-        raise InvalidFieldException("")
+        raise InvalidFieldException("usuario")
 
 
 def delete_usuario(usuario: dict[str, str], registro: str) -> None:

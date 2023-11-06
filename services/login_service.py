@@ -8,7 +8,10 @@ from util.validator import validate_login
 
 def login(data: dict[str, str]) -> str:
     if validate_login(data) and check_login(data.get('registro'), data.get('senha')):
-        return create_access_token(identity=data.get('registro'))
+        return create_access_token(identity={
+            "registro": data.get('registro'),
+            "senha": data.get('senha')
+        })
     else:
         raise InvalidCredentialsException()
 

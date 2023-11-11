@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, Response, current_app
 from flask_jwt_extended import jwt_required
 
 from exceptions.InvalidCredentialsException import InvalidCredentialsException
@@ -13,9 +13,12 @@ login_mold = Blueprint("login", __name__)
 def login_route():
     if request.mimetype == 'application/json':
         try:
-            return build_response(True, "login successful", 201, kwargs={
-                'token': login(request.json)
+            response: Response = build_response(True, "login successful", 200, kwargs={
+                'token': login(request.json),
+                'registro': request.json.get('registro')
             })
+            current_app.logger.info(f'OUT >> {response.json}')
+            return response
         except InvalidFieldException as ex:
             return build_response(False, str(ex), 422)
         except InvalidCredentialsException as ex:
@@ -28,4 +31,6 @@ def login_route():
 @jwt_required()
 def logout_route():
     logout()
-    return build_response(True, "logout successful", 201)
+    response = build_response(True, "logout successful", 201)
+    current_app.logger.info(f'OUT >> {response.json}')
+    return response

@@ -1,4 +1,5 @@
 import os
+from logging.config import dictConfig
 
 from flask import Flask, json
 from flask_cors import CORS
@@ -12,6 +13,7 @@ from services.token_service import jwt
 
 
 def create_app():
+    _configure_logger()
     flask_app: Flask = Flask(__name__.split('.')[0])
     flask_app.config.from_pyfile(os.path.join(".", "config/app.conf"), silent=False)
     _register_blueprints(flask_app)
@@ -34,6 +36,27 @@ def _register_extensions(flask_app):
     app_migrate.init_app(flask_app)
 
 
+def _configure_logger():
+    dictConfig(
+        {
+            "version": 1,
+            "formatters": {
+                "default": {
+                    "format": "[%(asctime)s] [%(levelname)s | %(module)s] %(message)s",
+                    "datefmt": "%B %d, %Y %H:%M:%S",
+                },
+            },
+            "handlers": {
+                "console": {
+                    "class": "logging.StreamHandler",
+                    "formatter": "default",
+                },
+            },
+            "root": {"level": "DEBUG", "handlers": ["console"]},
+        }
+    )
+
+
 app = create_app()
 
 
@@ -51,4 +74,4 @@ def _handle_exception(e):
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=22000)

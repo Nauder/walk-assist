@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from functools import wraps
 
-from flask_jwt_extended import JWTManager, get_jwt, decode_token
+from flask_jwt_extended import JWTManager, get_jwt
 
 from extensions import db
 from models import TokenBlocklist
@@ -27,12 +27,23 @@ def admin_required(f):
     return decorated_function
 
 
+def is_self_or_admin(registro: str):
+    if is_admin_token() or is_self_token():
+        return True
+    return False
+
+
 def is_admin_token() -> bool:
 
     if "registro" in get_jwt().get('sub').keys():
-        return get_usuario(get_jwt().get('sub').get("registro")).get("tipo_usuario") == 1
+        print(get_jwt().get('sub'))
+        return get_usuario(str(get_jwt().get('sub').get("registro"))).get("tipo_usuario") == 1
 
     return False
+
+
+def is_self_token() -> bool:
+    return True
 
 
 @jwt.token_in_blocklist_loader

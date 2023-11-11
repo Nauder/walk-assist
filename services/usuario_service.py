@@ -1,5 +1,6 @@
 from exceptions.InvalidCredentialsException import InvalidCredentialsException
 from exceptions.InvalidFieldException import InvalidFieldException
+from exceptions.UniqueViolationException import UniqueViolationException
 from extensions import db
 from models import Usuario
 from util.validator import validate_usuario
@@ -17,16 +18,21 @@ def get_usuario(registro: str) -> Usuario:
 
 def post_usuario(usuario: dict[str, str]) -> Usuario:
     if validate_usuario(usuario):
-        new_usuario: Usuario = Usuario(
-            usuario.get('registro'),
-            usuario.get('email'),
-            usuario.get('senha'),
-            usuario.get('nome'),
-            usuario.get('tipo_usuario')
-        )
-        db.session.add(new_usuario)
-        db.session.commit()
-        return new_usuario
+        if bool(Usuario.query.filter(Usuario.registro == str(usuario.get('registro'))).first()):
+            raise UniqueViolationException('registro', usuario.get('registro'))
+        elif bool(Usuario.query.filter(Usuario.email == str(usuario.get('email'))).first()):
+            raise UniqueViolationException('email', usuario.get('email'))
+        else:
+            new_usuario: Usuario = Usuario(
+                usuario.get('registro'),
+                usuario.get('email'),
+                usuario.get('senha'),
+                usuario.get('nome'),
+                usuario.get('tipo_usuario')
+            )
+            db.session.add(new_usuario)
+            db.session.commit()
+            return new_usuario
     else:
         raise InvalidFieldException("usuario")
 

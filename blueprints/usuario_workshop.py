@@ -4,6 +4,7 @@ from flask_jwt_extended import jwt_required
 
 from exceptions.InvalidCredentialsException import InvalidCredentialsException
 from exceptions.InvalidFieldException import InvalidFieldException
+from exceptions.UniqueViolationException import UniqueViolationException
 from services.token_service import admin_required
 from services.usuario_service import get_usuarios, post_usuario, get_usuario, put_usuario, delete_usuario
 from util.response_builder import build_response
@@ -42,7 +43,7 @@ def post_usuario_route() -> Response:
         try:
             post_usuario(request.json)
             return build_response(True, "user created successfully", 201)
-        except InvalidFieldException as ex:
+        except (InvalidFieldException, UniqueViolationException) as ex:
             return build_response(False, str(ex), 422)
     else:
         return build_response(False, "unsupported media type", 415)
@@ -60,6 +61,8 @@ def put_usuario_route(registro: str) -> Response:
 
 @usuario_mold.delete('/<registro>')
 @jwt_required()
+@admin_required
+@cross_origin(supports_credentials=True)
 def delete_usuario_route(registro: str) -> Response:
     try:
         delete_usuario(request.json, registro)

@@ -6,6 +6,10 @@ def validate_usuario(usuario: dict[str, str]) -> bool:
     return verify_keys(usuario, ('nome', 'registro', 'email', 'senha', 'tipo_usuario'))
 
 
+def validate_put_usuario(usuario: dict[str, str]) -> bool:
+    return verify_keys(usuario, ('nome', 'email', 'senha'))
+
+
 def validate_login(login: dict[str, str]) -> bool:
     return verify_keys(login, ('registro', 'senha'))
 

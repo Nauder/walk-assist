@@ -25,12 +25,15 @@ def get_usuarios_route() -> Response:
 @usuario_mold.get('/<registro>')
 @jwt_required()
 def get_usuario_route(registro: str) -> Response:
-    return build_response(
-        True,
-        "user obtained successfully",
-        200,
-        kwargs={'usuario': get_usuario(registro)}
-    )
+    if is_self_or_admin():
+        return build_response(
+            True,
+            "user obtained successfully",
+            200,
+            kwargs={'usuario': get_usuario(registro)}
+        )
+    else:
+        return build_response(False, "user not authorized", 403)
 
 
 @usuario_mold.post('')
@@ -51,11 +54,14 @@ def post_usuario_route() -> Response:
 @usuario_mold.put('/<registro>')
 @jwt_required()
 def put_usuario_route(registro: str) -> Response:
-    try:
-        put_usuario(request.json, registro)
-        return build_response(True, "user edited successfully", 200)
-    except InvalidFieldException as ex:
-        return build_response(False, str(ex), 422)
+    if is_self_or_admin():
+        try:
+            put_usuario(request.json, registro)
+            return build_response(True, "user edited successfully", 200)
+        except InvalidFieldException as ex:
+            return build_response(False, str(ex), 422)
+    else:
+        return build_response(False, "user not authorized", 403)
 
 
 @usuario_mold.delete('/<registro>')

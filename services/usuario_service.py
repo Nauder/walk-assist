@@ -2,7 +2,7 @@ from exceptions import InvalidFieldException
 from exceptions import UniqueViolationException
 from extensions import db
 from models import Usuario
-from util.validator import validate_usuario
+from util.validator import validate_usuario, validate_put_usuario
 
 
 def get_usuarios() -> list[Usuario]:
@@ -37,7 +37,7 @@ def post_usuario(usuario: dict[str, str]) -> Usuario:
 
 
 def put_usuario(usuario: dict[str, str], registro: str) -> Usuario:
-    if validate_usuario(usuario):
+    if validate_put_usuario(usuario):
         existing_usuario: Usuario = Usuario.query.filter(Usuario.registro == registro).first()
         for key, value in usuario.items():
             setattr(existing_usuario, key, value)

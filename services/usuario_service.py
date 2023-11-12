@@ -1,6 +1,5 @@
-from exceptions.InvalidCredentialsException import InvalidCredentialsException
-from exceptions.InvalidFieldException import InvalidFieldException
-from exceptions.UniqueViolationException import UniqueViolationException
+from exceptions import InvalidFieldException
+from exceptions import UniqueViolationException
 from extensions import db
 from models import Usuario
 from util.validator import validate_usuario
@@ -11,7 +10,7 @@ def get_usuarios() -> list[Usuario]:
 
 
 def get_usuario(registro: str) -> Usuario:
-    usuario = Usuario.query.filter(Usuario.registro == registro).first()
+    usuario: Usuario = Usuario.query.filter(Usuario.registro == registro).first()
 
     return usuario.as_dict() if usuario is not None else {}
 
@@ -39,7 +38,7 @@ def post_usuario(usuario: dict[str, str]) -> Usuario:
 
 def put_usuario(usuario: dict[str, str], registro: str) -> Usuario:
     if validate_usuario(usuario):
-        existing_usuario = Usuario.query.filter(Usuario.registro == registro).first()
+        existing_usuario: Usuario = Usuario.query.filter(Usuario.registro == registro).first()
         for key, value in usuario.items():
             setattr(existing_usuario, key, value)
         db.session.commit()
@@ -48,16 +47,13 @@ def put_usuario(usuario: dict[str, str], registro: str) -> Usuario:
         raise InvalidFieldException("usuario")
 
 
-def delete_usuario(usuario: dict[str, str], registro: str) -> None:
-    if "senha" in usuario.keys():
-        existing_usuario = Usuario.query.filter(Usuario.registro == registro).first()
-        if existing_usuario is not None and existing_usuario.senha == usuario.get('senha'):
-            db.session.delete(existing_usuario)
-            db.session.commit()
-        else:
-            raise InvalidCredentialsException()
+def delete_usuario(registro: str) -> None:
+    existing_usuario: Usuario = Usuario.query.filter(Usuario.registro == registro).first()
+    if existing_usuario is not None:
+        db.session.delete(existing_usuario)
+        db.session.commit()
     else:
-        raise InvalidFieldException("senha")
+        raise InvalidFieldException("registro")
 
 
 def check_login(registro: str, password: str) -> bool:

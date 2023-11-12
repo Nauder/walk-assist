@@ -1,7 +1,7 @@
 import os
 from logging.config import dictConfig
 
-from flask import Flask, json
+from flask import Flask, json, request, Response
 from flask_cors import CORS
 from werkzeug.exceptions import HTTPException
 
@@ -13,6 +13,13 @@ from services.token_service import jwt
 
 
 def create_app():
+    """
+    Creates and configures a Flask application instance.
+
+    Returns:
+        Flask: The configured Flask application instance.
+    """
+
     _configure_logger()
     flask_app: Flask = Flask(__name__.split('.')[0])
     flask_app.config.from_pyfile(os.path.join(".", "config/app.conf"), silent=False)
@@ -43,7 +50,7 @@ def _configure_logger():
             "formatters": {
                 "default": {
                     "format": "[%(asctime)s] [%(levelname)s | %(module)s] %(message)s",
-                    "datefmt": "%B %d, %Y %H:%M:%S",
+                    "datefmt": "%d/%m/%Y %H:%M:%S",
                 },
             },
             "handlers": {
@@ -70,6 +77,22 @@ def _handle_exception(e):
          "message": e.description,
     })
     response.content_type = "application/json"
+    return response
+
+
+@app.before_request
+def log_request_info() -> None:
+    app.logger.debug(f'REQUEST [{request.path}] <<')
+    app.logger.debug(f'Headers:\n{request.headers}')
+    app.logger.debug(f'Body:\n{request.get_data()}')
+
+
+@app.after_request
+def log_request_info(response: Response) -> Response:
+    app.logger.debug('RESPONSE >>')
+    app.logger.debug(f'Headers:\n{response.headers}')
+    app.logger.debug(f'Body:\n{response.get_data()}')
+
     return response
 
 

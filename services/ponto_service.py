@@ -1,4 +1,4 @@
-from exceptions.InvalidFieldException import InvalidFieldException
+from exceptions import InvalidFieldException
 from extensions import db
 from models import Ponto
 from util.validator import validate_ponto

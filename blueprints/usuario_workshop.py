@@ -2,18 +2,17 @@ from flask import Blueprint, request, Response
 from flask_cors import cross_origin
 from flask_jwt_extended import jwt_required
 
-from exceptions.InvalidCredentialsException import InvalidCredentialsException
-from exceptions.InvalidFieldException import InvalidFieldException
-from exceptions.UniqueViolationException import UniqueViolationException
-from services.token_service import admin_required
+from exceptions import InvalidCredentialsException, InvalidFieldException, UniqueViolationException
+from services.token_service import admin_required, is_self_or_admin
 from services.usuario_service import get_usuarios, post_usuario, get_usuario, put_usuario, delete_usuario
 from util.response_builder import build_response
 
-usuario_mold = Blueprint("usuarios", __name__)
+usuario_mold: Blueprint = Blueprint("usuarios", __name__)
 
 
 @usuario_mold.get('')
 @jwt_required()
+@admin_required
 def get_usuarios_route() -> Response:
     return build_response(
         True,
@@ -61,13 +60,15 @@ def put_usuario_route(registro: str) -> Response:
 
 @usuario_mold.delete('/<registro>')
 @jwt_required()
-@admin_required
 @cross_origin(supports_credentials=True)
 def delete_usuario_route(registro: str) -> Response:
-    try:
-        delete_usuario(request.json, registro)
-        return build_response(True, "user removed successfully", 200)
-    except InvalidFieldException as ex:
-        return build_response(False, str(ex), 422)
-    except InvalidCredentialsException as ex:
-        return build_response(False, str(ex), 401)
+    if is_self_or_admin():
+        try:
+            delete_usuario(registro)
+            return build_response(True, "user removed successfully", 200)
+        except InvalidFieldException as ex:
+            return build_response(False, str(ex), 422)
+        except InvalidCredentialsException as ex:
+            return build_response(False, str(ex), 401)
+    else:
+        return build_response(False, "user not authorized", 403)

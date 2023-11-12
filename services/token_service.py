@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from functools import wraps
 
+from flask import jsonify
 from flask_jwt_extended import JWTManager, get_jwt
 
 from extensions import db
@@ -27,7 +28,7 @@ def admin_required(f):
     return decorated_function
 
 
-def is_self_or_admin(registro: str):
+def is_self_or_admin() -> bool:
     if is_admin_token() or is_self_token():
         return True
     return False
@@ -36,7 +37,6 @@ def is_self_or_admin(registro: str):
 def is_admin_token() -> bool:
 
     if "registro" in get_jwt().get('sub').keys():
-        print(get_jwt().get('sub'))
         return get_usuario(str(get_jwt().get('sub').get("registro"))).get("tipo_usuario") == 1
 
     return False
@@ -51,3 +51,11 @@ def check_if_token_revoked(jwt_header, jwt_payload: dict) -> bool:
     jti = jwt_payload["jti"]
     token = db.session.query(TokenBlocklist.id).filter_by(jti=jti).scalar()
     return token is not None
+
+
+@jwt.expired_token_loader
+def my_expired_token_callback(jwt_header, jwt_payload: dict):
+    return jsonify({
+        'success': False,
+        'message': 'The token has expired'
+    }), 401

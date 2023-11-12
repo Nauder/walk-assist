@@ -1,7 +1,7 @@
 from flask import Blueprint, request, Response
 from flask_jwt_extended import jwt_required
 
-from exceptions.InvalidFieldException import InvalidFieldException
+from exceptions import InvalidFieldException
 from services.ponto_service import get_pontos, post_ponto
 from util.response_builder import build_response
 

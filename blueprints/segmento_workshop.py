@@ -1,8 +1,8 @@
 from flask import Blueprint, request, Response
 from flask_jwt_extended import jwt_required
 
-from exceptions.InvalidCredentialsException import InvalidCredentialsException
-from exceptions.InvalidFieldException import InvalidFieldException
+from exceptions import InvalidCredentialsException
+from exceptions import InvalidFieldException
 from services.usuario_service import get_usuarios, post_usuario, get_usuario, put_usuario, delete_usuario
 from util.response_builder import build_response
 

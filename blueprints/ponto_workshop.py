@@ -3,6 +3,7 @@ from flask_jwt_extended import jwt_required
 
 from exceptions import InvalidFieldException
 from services.ponto_service import get_pontos, post_ponto
+from services.token_service import admin_required
 from util.response_builder import build_response
 
 ponto_mold = Blueprint("pontos", __name__)
@@ -21,6 +22,7 @@ def get_pontos_route() -> Response:
 
 @ponto_mold.post('/')
 @jwt_required()
+@admin_required
 def post_ponto_route() -> Response:
     if request.mimetype == 'application/json':
         try:

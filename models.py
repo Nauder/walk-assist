@@ -4,7 +4,7 @@ from extensions import db
 class Usuario(db.Model):
     __tablename__: str = 'usuario'
     id_usuario: db.Column = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    registro: db.Column = db.Column(db.String, unique=True, index=True)
+    registro: db.Column = db.Column(db.Integer, unique=True, index=True)
     email: db.Column = db.Column(db.String(64), unique=True, index=True)
     senha: db.Column = db.Column(db.String(128))
     nome: db.Column = db.Column(db.String(128))

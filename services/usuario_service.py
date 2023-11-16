@@ -6,7 +6,7 @@ from util.validator import validate_usuario, validate_put_usuario
 
 
 def get_usuarios() -> list[Usuario]:
-    return [usuario.as_dict() for usuario in Usuario.query.all()]
+    return [usuario.as_dict() for usuario in Usuario.query.order_by(Usuario.registro).all()]
 
 
 def get_usuario(registro: str) -> Usuario:

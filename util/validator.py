@@ -1,5 +1,5 @@
 def verify_keys(data: dict[str, str], keys: tuple) -> bool:
-    return all(k in data for k in keys)
+    return all(k in data for k in keys) and all(v != "" for v in [data[k] for k in keys])
 
 
 def validate_usuario(usuario: dict[str, str]) -> bool:

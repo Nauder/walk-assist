@@ -9,7 +9,7 @@ def get_usuarios() -> list[Usuario]:
     return [usuario.as_dict() for usuario in Usuario.query.order_by(Usuario.registro).all()]
 
 
-def get_usuario(registro: str) -> Usuario:
+def get_usuario(registro: str) -> dict:
     usuario: Usuario = Usuario.query.filter(Usuario.registro == registro).first()
 
     return usuario.as_dict() if usuario is not None else {}

@@ -28,4 +28,4 @@ def login_route() -> Response:
 @jwt_required()
 def logout_route() -> Response:
     logout()
-    return build_response(True, "logout successful", 201)
+    return build_response(True, "logout successful", 200)

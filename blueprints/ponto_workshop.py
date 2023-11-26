@@ -23,7 +23,7 @@ def get_pontos_route() -> Response:
 
 @ponto_mold.get('/<ponto_id>')
 @jwt_required()
-def get_usuario_route(ponto_id: int) -> Response:
+def get_ponto_route(ponto_id: int) -> Response:
     return build_response(
         True,
         "point obtained successfully",

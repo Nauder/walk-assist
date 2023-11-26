@@ -44,7 +44,7 @@ def post_usuario_route() -> Response:
     if request.mimetype == 'application/json':
         try:
             post_usuario(request.json)
-            return build_response(True, "user created successfully", 201)
+            return build_response(True, "user created successfully", 200)
         except (InvalidFieldException, UniqueViolationException) as ex:
             return build_response(False, str(ex), 422)
     else:

@@ -3,63 +3,63 @@ from flask_jwt_extended import jwt_required
 
 from exceptions import InvalidCredentialsException
 from exceptions import InvalidFieldException
-from services.usuario_service import get_usuarios, post_usuario, get_usuario, put_usuario, delete_usuario
+from services.segmento_service import put_segmento, delete_segmento, post_segmento, get_segmentos, get_segmento
 from util.response_builder import build_response
 
 segmento_mold = Blueprint("segmentos", __name__)
 
 
-@segmento_mold.get('/')
+@segmento_mold.get('')
 @jwt_required()
 def get_segmentos_route() -> Response:
     return build_response(
         True,
         "segments obtained successfully",
         200,
-        kwargs={'segmentos': get_usuarios()}
+        kwargs={'segmentos': get_segmentos()}
     )
 
 
-@segmento_mold.get('/<registro>')
+@segmento_mold.get('/<segmento_id>')
 @jwt_required()
-def get_usuario_route(registro: str) -> Response:
+def get_segmento_route(segmento_id: int) -> Response:
     return build_response(
         True,
-        "user obtained successfully",
+        "segment obtained successfully",
         200,
-        kwargs={'usuario': get_usuario(registro)}
+        kwargs={'segmento': get_segmento(segmento_id)}
     )
 
 
-@segmento_mold.post('/')
+@segmento_mold.post('')
 @jwt_required()
-def post_usuario_route() -> Response:
+def post_segmento_route() -> Response:
     if request.mimetype == 'application/json':
         try:
-            post_usuario(request.json)
-            return build_response(True, "user created successfully", 201)
+            post_segmento(request.json)
+            return build_response(True, "segment created successfully", 200)
         except InvalidFieldException as ex:
             return build_response(False, str(ex), 422)
     else:
         return build_response(False, "unsupported media type", 415)
 
 
-@segmento_mold.put('/<registro>')
+@segmento_mold.put('/<segmento_id>')
 @jwt_required()
-def put_usuario_route(registro: str) -> Response:
+def put_segmento_route(segmento_id: int) -> Response:
     try:
-        put_usuario(request.json, registro)
-        return build_response(True, "user edited successfully", 200)
+        put_segmento(request.json, segmento_id)
+        return build_response(True, "segment edited successfully", 200)
     except InvalidFieldException as ex:
         return build_response(False, str(ex), 422)
 
 
-@segmento_mold.delete('/<registro>')
+@segmento_mold.delete('/<segmento_id>')
 @jwt_required()
-def delete_usuario_route(registro: str) -> Response:
+def delete_segmento_route(segmento_id: int) -> Response:
     try:
-        delete_usuario(request.json, registro)
-        return build_response(True, "user removed successfully", 200)
+        delete_segmento(segmento_id)
+        return build_response(True, "segment removed successfully", 200)
     except InvalidFieldException as ex:
         return build_response(False, str(ex), 422)
     except InvalidCredentialsException as ex:

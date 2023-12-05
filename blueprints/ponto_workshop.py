@@ -50,7 +50,7 @@ def post_ponto_route() -> Response:
     if request.mimetype == 'application/json':
         try:
             post_ponto(request.json)
-            return build_response(True, "point created successfully", 201)
+            return build_response(True, "point created successfully", 200)
         except InvalidFieldException as ex:
             return build_response(False, str(ex), 422)
     else:

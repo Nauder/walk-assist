@@ -45,7 +45,7 @@ class Ponto(db.Model):
 class Segmento(db.Model):
     __tablename__: str = 'segmento'
     segmento_id: db.Column = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    distancia: db.Column = db.Column(db.Integer)
+    distancia: db.Column = db.Column(db.Float)
     ponto_inicial: db.Column = db.Column(db.Integer)
     ponto_final: db.Column = db.Column(db.Integer)
     status: db.Column = db.Column(db.Integer)

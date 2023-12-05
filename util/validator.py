@@ -7,7 +7,7 @@ def verify_keys(data: dict[str, str], keys: tuple) -> bool:
 
 def validate_usuario(usuario: dict[str, str]) -> bool:
     return (verify_keys(usuario, ('nome', 'registro', 'email', 'senha', 'tipo_usuario'))
-            and validate_password(usuario.get('senha')))
+            and validate_password(usuario.get('senha')) and usuario['tipo_usuario'] in [0, 1])
 
 
 def validate_put_usuario(usuario: dict[str, str]) -> bool:
@@ -23,7 +23,8 @@ def validate_ponto(ponto: dict[str, str]) -> bool:
 
 
 def validate_segmento(segmento: dict[str, str]) -> bool:
-    return verify_keys(segmento, ('ponto_inicial', 'ponto_final', 'status', 'distancia', 'direcao'))
+    return (verify_keys(segmento, ('ponto_inicial', 'ponto_final', 'status', 'distancia', 'direcao'))
+            and segmento['status'] in [0, 1])
 
 
 def validate_password(password: str) -> bool:

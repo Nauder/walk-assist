@@ -1,8 +1,8 @@
-"""initial migration.
+"""empty message
 
-Revision ID: 2f88df7b0cb5
+Revision ID: 1b500ebce696
 Revises: 
-Create Date: 2023-11-26 14:44:32.716866
+Create Date: 2023-11-29 22:57:19.672102
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '2f88df7b0cb5'
+revision = '1b500ebce696'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -28,7 +28,7 @@ def upgrade():
 
     op.create_table('segmento',
     sa.Column('segmento_id', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('distancia', sa.Integer(), nullable=True),
+    sa.Column('distancia', sa.Float(), nullable=True),
     sa.Column('ponto_inicial', sa.Integer(), nullable=True),
     sa.Column('ponto_final', sa.Integer(), nullable=True),
     sa.Column('status', sa.Integer(), nullable=True),

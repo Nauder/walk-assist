@@ -21,7 +21,7 @@ def post_ponto(ponto: dict[str, str]) -> Ponto:
         db.session.commit()
         return new_ponto
     else:
-        raise InvalidFieldException("")
+        raise InvalidFieldException("ponto")
 
 
 def put_ponto(ponto: dict[str, str], ponto_id: int) -> Ponto:

@@ -7,6 +7,7 @@ from werkzeug.exceptions import HTTPException
 
 from blueprints.login_workshop import login_mold
 from blueprints.ponto_workshop import ponto_mold
+from blueprints.rota_workshop import rota_mold
 from blueprints.segmento_workshop import segmento_mold
 from blueprints.usuario_workshop import usuario_mold
 from extensions import db, app_migrate
@@ -36,6 +37,7 @@ def _register_blueprints(flask_app):
     flask_app.register_blueprint(ponto_mold, url_prefix="/pontos")
     flask_app.register_blueprint(segmento_mold, url_prefix="/segmentos")
     flask_app.register_blueprint(login_mold, url_prefix="/")
+    flask_app.register_blueprint(rota_mold, url_prefix="/rotas")
 
 
 def _register_extensions(flask_app):

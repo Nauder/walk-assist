@@ -27,5 +27,9 @@ def validate_segmento(segmento: dict[str, str]) -> bool:
             and segmento['status'] in [0, 1])
 
 
+def validate_rota_params(rota_params: dict[str, str]) -> bool:
+    return verify_keys(rota_params, ('origem', 'destino'))
+
+
 def validate_password(password: str) -> bool:
     return password != md5("".encode('utf-8')).hexdigest()

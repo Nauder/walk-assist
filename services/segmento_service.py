@@ -15,6 +15,16 @@ def get_segmentos() -> list[Segmento]:
     return segmentos
 
 
+def get_segmentos_ativos() -> list[Segmento]:
+    segmentos: list = [segmento.as_dict() for segmento in Segmento.query.filter(Segmento.status == 1).all()]
+
+    for segmento in segmentos:
+        segmento['ponto_inicial'] = get_ponto(segmento['ponto_inicial']).get('nome')
+        segmento['ponto_final'] = get_ponto(segmento['ponto_final']).get('nome')
+
+    return segmentos
+
+
 def get_segmento(segmento_id: int) -> dict:
     segmento: Segmento = Segmento.query.filter(Segmento.segmento_id == segmento_id).first()
 
@@ -27,6 +37,14 @@ def get_segmento(segmento_id: int) -> dict:
         return seg_dict
 
     return {}
+
+
+def get_segmento_ativo_by_pontos(ponto_inicial, ponto_final) -> dict:
+    segmentos = get_segmentos_ativos()
+
+    for segmento in segmentos:
+        if segmento['ponto_inicial'] == ponto_inicial and segmento['ponto_final'] == ponto_final:
+            return segmento
 
 
 def post_segmento(segmento: dict[str, str]) -> Segmento:

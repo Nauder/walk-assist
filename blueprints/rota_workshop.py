@@ -22,6 +22,6 @@ def post_rota_route() -> Response:
         except InvalidFieldException as ex:
             return build_response(False, str(ex), 422)
         except KeyError:
-            return build_response(False, 'one of the points could not be found', 422)
+            return build_response(False, 'a route could not be made between the given points', 422)
     else:
         return build_response(False, "unsupported media type", 415)

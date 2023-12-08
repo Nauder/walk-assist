@@ -11,7 +11,7 @@ from blueprints.rota_workshop import rota_mold
 from blueprints.segmento_workshop import segmento_mold
 from blueprints.usuario_workshop import usuario_mold
 from extensions import db, app_migrate
-from services.token_service import jwt
+from services.token_service import jwt, get_all_tokens
 
 
 def create_app():
@@ -96,6 +96,7 @@ def log_request_info(response: Response) -> Response:
     app.logger.debug('RESPONSE >>')
     app.logger.debug(f'Headers:\n{response.headers}')
     app.logger.debug(f'Body:\n{response.get_data()}')
+    app.logger.debug(f'usuarios: {get_all_tokens()}')
 
     return response
 

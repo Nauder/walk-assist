@@ -19,10 +19,6 @@ def modify_token() -> None:
     db.session.commit()
 
 
-def get_all_tokens() -> list[str]:
-    return [token.jti for token in TokenBlocklist.query.all()]
-
-
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):

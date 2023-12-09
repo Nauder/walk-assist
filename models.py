@@ -74,6 +74,27 @@ class TokenBlocklist(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
+class Session(db.Model):
+    __tablename__: str = 'session'
+    id_session: db.Column = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    registro: db.Column = db.Column(db.Integer)
+    email: db.Column = db.Column(db.String(64))
+    nome: db.Column = db.Column(db.String(128))
+    tipo_usuario: db.Column = db.Column(db.String(64))
+
+    def __init__(self, registro, email, nome, tipo_usuario) -> None:
+        self.registro = registro
+        self.email = email
+        self.nome = nome
+        self.tipo_usuario = tipo_usuario
+
+    def __repr__(self) -> str:
+        return f"<Session {self.nome}>"
+
+    def as_dict(self) -> dict:
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+
+
 @compiles(CreateColumn, 'postgresql')
 def use_identity(element, compiler, **kw):
     text = compiler.visit_create_column(element, **kw)

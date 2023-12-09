@@ -9,9 +9,10 @@ from blueprints.login_workshop import login_mold
 from blueprints.ponto_workshop import ponto_mold
 from blueprints.rota_workshop import rota_mold
 from blueprints.segmento_workshop import segmento_mold
+from blueprints.session_workshop import session_mold
 from blueprints.usuario_workshop import usuario_mold
 from extensions import db, app_migrate
-from services.token_service import jwt, get_all_tokens
+from services.token_service import jwt
 
 
 def create_app():
@@ -38,6 +39,7 @@ def _register_blueprints(flask_app):
     flask_app.register_blueprint(segmento_mold, url_prefix="/segmentos")
     flask_app.register_blueprint(login_mold, url_prefix="/")
     flask_app.register_blueprint(rota_mold, url_prefix="/rotas")
+    flask_app.register_blueprint(session_mold, url_prefix="/sessions")
 
 
 def _register_extensions(flask_app):
@@ -78,7 +80,7 @@ def _handle_exception(e):
         "success": False,
         "code": e.code,
         "name": e.name,
-         "message": e.description,
+        "message": e.description,
     })
     response.content_type = "application/json"
     return response
@@ -86,17 +88,19 @@ def _handle_exception(e):
 
 @app.before_request
 def log_request_info() -> None:
-    app.logger.debug(f'REQUEST [{request.path}] <<')
-    app.logger.debug(f'Headers:\n{request.headers}')
-    app.logger.debug(f'Body:\n{request.get_data()}')
+    if request.path != '/sessions':
+        app.logger.debug(f'REQUEST [{request.path}] <<')
+        app.logger.debug(f'Headers:\n{request.headers}')
+        app.logger.debug(f'Body:\n{request.get_data()}')
 
 
 @app.after_request
 def log_request_info(response: Response) -> Response:
-    app.logger.debug('RESPONSE >>')
-    app.logger.debug(f'Headers:\n{response.headers}')
-    app.logger.debug(f'Body:\n{response.get_data()}')
-    app.logger.debug(f'usuarios: {get_all_tokens()}')
+    data: str = response.get_data(as_text=True)
+    if 'sessions' not in data:
+        app.logger.debug('RESPONSE >>')
+        app.logger.debug(f'Headers:\n{response.headers}')
+        app.logger.debug(f'Body:\n{data}')
 
     return response
 

@@ -1,13 +1,15 @@
 # Walk Assist
 
-This repository contains the **WIP** code for a project aimed at helping blind individuals navigate specific locations on foot, developed as a university class project. The project involves a Flask-based REST API that utilizes Alchemy for ORM and PostgreSQL for database management. The database migrations are handled with Flask-Migrate
+This repository contains the code for a project aimed at helping blind individuals navigate specific locations on foot,
+developed as a university class project. The project involves a Flask-based REST API that utilizes Alchemy for ORM and
+PostgreSQL for database management. The database migrations are handled with Flask-Migrate
 
 ## Table of Contents
 
 - [Features](#features)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
 - [Usage](#usage)
 - [Database Schema](#database-schema)
 - [License](#license)
@@ -49,7 +51,8 @@ This repository contains the **WIP** code for a project aimed at helping blind i
     pip install -r requirements.txt
     ```
 
-4. Set up the PostgreSQL database by running the `database.sql` script and configure the database settings in the `config/app.conf` file.
+4. Set up the PostgreSQL database by running the `database.sql` script and configure the database settings in the
+   `config/app.conf` file.
 
 5. Run the application:
 
@@ -59,13 +62,19 @@ This repository contains the **WIP** code for a project aimed at helping blind i
 
 ## Usage
 
-The API provides endpoints to assist blind individuals in navigating specific locations. Refer to the [API Endpoints](https://app.swaggerhub.com/apis/DEWAVEB140_1/api-de_gerenciamento_de_usuarios_e_rotas/1.0.0#/) on Swagger for detailed information on available endpoints.
+The API provides endpoints to assist blind individuals in navigating specific locations.
+Refer to
+the [API Endpoints](https://app.swaggerhub.com/apis/DEWAVEB140_1/api-de_gerenciamento_de_usuarios_e_rotas/1.0.0#/) on
+Swagger for detailed information on available endpoints.
 
 ## Database Schema
 
 The PostgreSQL database schema includes the following tables:
 
 - `usuario`: Stores application user information including name, password, email and admin status.
+- `ponto`: Stores application point names, to be used in segments.
+- `segmento`: Represents a segment between two points, including a direction and distance.
+- `token_blocklist`: Stores blocklisted JWT tokens and their creation date.
 
 ## License
 

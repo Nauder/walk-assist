@@ -20,6 +20,7 @@ PostgreSQL for database management. The database migrations are handled with Fla
 - Utilizes Alchemy for object-relational mapping.
 - PostgreSQL database for storage and retrieval of location and user information.
 - Authentication and authorization for standard and admin users through JWT.
+- Routes are dynamically calculated using Dijkstra's algorithm to ensure the shortest path.
 
 ## Getting Started
 
